@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "sourceMap": false
+  },
+  "files": [
+    "./typings/index.d.ts",
+    "./src/app.ts",
+    "./src/pages/index/index.ts",
+    "./src/pages/logs/logs.ts"
+  ]
+}

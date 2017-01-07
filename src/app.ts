@@ -1,12 +1,5 @@
 declare function getApp(): SimpleApp;
 
-declare interface SimpleApp extends BaseApp {
-  globalData: {
-    userInfo: any,
-  }
-  getUserInfo(cb: (userInfo: Object) => void): void;
-}
-
 class SimpleApp {
   globalData = {
     userInfo: null,
@@ -18,7 +11,7 @@ class SimpleApp {
     wx.setStorageSync('logs', logs)
   }
 
-  getUserInfo(cb) {
+  getUserInfo(cb: (userInfo: Object) => void) {
     if (this.globalData.userInfo) {
       typeof cb == "function" && cb(this.globalData.userInfo);
     } else {

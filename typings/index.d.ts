@@ -7,6 +7,7 @@ declare namespace wx {
 }
 
 declare interface BaseApp {
+  onLaunch(): void
 }
 
 declare interface BasePage {

@@ -1,7 +1,6 @@
-declare interface LogsPage extends BasePage {
-}
+import BasePage from '../base';
 
-class LogsPage {
+class LogsPage extends BasePage {
   data = {
   }
   

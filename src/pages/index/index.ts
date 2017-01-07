@@ -1,9 +1,8 @@
-declare interface IndexPage extends BasePage {
-}
+import BasePage from '../base';
 
 const app = getApp();
 
-class IndexPage {
+class IndexPage extends BasePage {
   data = {
     motto: 'Hello World',
     userInfo: {},

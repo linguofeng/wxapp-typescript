@@ -1,5 +1,13 @@
 "use strict";
+// fix rxjs
+global.global = global;
+global.Object = Object;
+global.clearTimeout = clearTimeout;
 var Promise = require("./libs/bluebird");
+var Rx = require("./libs/@reactivex/rxjs");
+Rx.Observable
+    .of('hello world')
+    .subscribe(function (x) { return console.log(x); });
 var Application = (function () {
     function Application() {
         this.globalData = {

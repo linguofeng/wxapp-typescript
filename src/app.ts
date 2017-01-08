@@ -1,4 +1,14 @@
+// fix rxjs
+global.global = global;
+global.Object = Object;
+global.clearTimeout = clearTimeout;
+
 import * as Promise from 'bluebird';
+import * as Rx from '@reactivex/rxjs';
+
+Rx.Observable
+  .of('hello world')
+  .subscribe((x) => console.log(x));
 
 class Application {
   globalData = {

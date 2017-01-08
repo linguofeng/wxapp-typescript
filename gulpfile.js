@@ -2,6 +2,7 @@ const path = require('path');
 const gulp = require('gulp');
 const ts = require('gulp-typescript');
 const modify = require('gulp-modify');
+const rename = require("gulp-rename");
 const readJson = require('read-package-json');
 
 const tsProject = ts.createProject('tsconfig.json');
@@ -18,13 +19,26 @@ const paths = {
   ],
 };
 
+const packages = {
+  '@reactivex/rxjs': {
+    main: 'dist/global/Rx.js',
+  },
+};
+
+const getEntryFilePath = (package) => {
+  if (packages[package]) {
+    return packages[package].main;
+  }
+  return null;
+}
+
 gulp.task('compile', () => {
   gulp.src(paths.scripts)
     .pipe(tsProject())
     .js.pipe(modify({
       // 文件修改，替换`require('bluebird')`为`require("../libs/bluebird")`
       fileModifier: (file, contents) => {
-        if (!contents.match(/require\("(\w+)"\)/g)) {
+        if (!contents.match(/(require\("([^.].*)"\))/g)) {
           return contents;
         }
         let rPath = path.relative(file.path, './src');
@@ -32,7 +46,7 @@ gulp.task('compile', () => {
         if (rPath.length === 0) {
           rPath = './';
         }
-        return contents.replace(/require\("(\w+)"\)/g, `require("${rPath}libs/$1")`);
+        return contents.replace(/(require\("([^.].*)"\))/g, `require("${rPath}libs/$2")`);
       },
     }))
     .pipe(gulp.dest('dist'));
@@ -47,11 +61,19 @@ gulp.task('copyStatic', () => {
 gulp.task('copyLibs', () => {
   readJson('package.json', (err, { dependencies }) => {
     Object.keys(dependencies).forEach((name) => {
-      readJson(`node_modules/${name}/package.json`, (err, data) => {
-        const file = path.join('node_modules', name, data.browser || data.main);
+      let file = getEntryFilePath(name);
+      if (!file) {
+        readJson(path.join('node_modules', name, 'package.json'), (err, data) => {
+          file = path.join('node_modules', name, data.browser || data.main);
+          gulp.src(file, { base: path.dirname(file) })
+            .pipe(gulp.dest('dist/libs'));
+        });
+      } else {
+        file = path.join('node_modules', name, file);
         gulp.src(file, { base: path.dirname(file) })
+          .pipe(rename(`${name}.js`))
           .pipe(gulp.dest('dist/libs'));
-      });
+      }
     });
     // TODO 删除不存在的库
   });

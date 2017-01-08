@@ -19,3 +19,9 @@ declare function App(app: Application): void;
 declare function Page(page: BasePage): void;
 
 declare function getApp(): Application;
+
+declare var global: {
+  global: any,
+  Object: any,
+  clearTimeout: any,
+}

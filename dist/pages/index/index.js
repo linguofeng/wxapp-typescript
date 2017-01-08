@@ -16,7 +16,6 @@ var IndexPage = (function (_super) {
         };
         return _this;
     }
-    //事件处理函数
     IndexPage.prototype.bindViewTap = function () {
         wx.navigateTo({
             url: '../logs/logs',
@@ -24,10 +23,7 @@ var IndexPage = (function (_super) {
     };
     IndexPage.prototype.onLoad = function () {
         var _this = this;
-        console.log('onLoad');
-        //调用应用实例的方法获取全局数据
-        app.getUserInfo(function (userInfo) {
-            //更新数据
+        app.getUserInfo().then(function (userInfo) {
             _this.setData({
                 userInfo: userInfo,
             });

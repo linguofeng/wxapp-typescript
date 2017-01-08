@@ -1,33 +1,37 @@
-var SimpleApp = (function () {
-    function SimpleApp() {
+"use strict";
+var Promise = require("./libs/bluebird");
+var Application = (function () {
+    function Application() {
         this.globalData = {
             userInfo: null,
         };
     }
-    SimpleApp.prototype.onLaunch = function () {
+    Application.prototype.onLaunch = function () {
         var logs = wx.getStorageSync('logs') || [];
         logs.unshift(Date.now());
         wx.setStorageSync('logs', logs);
     };
-    SimpleApp.prototype.getUserInfo = function (cb) {
+    Application.prototype.getUserInfo = function () {
         var _this = this;
-        if (this.globalData.userInfo) {
-            typeof cb == "function" && cb(this.globalData.userInfo);
-        }
-        else {
-            //调用登录接口
-            wx.login({
-                success: function () {
-                    wx.getUserInfo({
-                        success: function (res) {
-                            _this.globalData.userInfo = res.userInfo;
-                            typeof cb == "function" && cb(_this.globalData.userInfo);
-                        },
-                    });
-                },
-            });
-        }
+        return new Promise(function (resolve) {
+            if (_this.globalData.userInfo) {
+                resolve(_this.globalData.userInfo);
+            }
+            else {
+                wx.login({
+                    success: function () {
+                        wx.getUserInfo({
+                            success: function (_a) {
+                                var userInfo = _a.userInfo;
+                                _this.globalData.userInfo = userInfo;
+                                resolve(userInfo);
+                            },
+                        });
+                    },
+                });
+            }
+        });
     };
-    return SimpleApp;
+    return Application;
 }());
-App(new SimpleApp());
+App(new Application());

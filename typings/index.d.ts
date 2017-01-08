@@ -6,13 +6,16 @@ declare namespace wx {
   export function navigateTo(args: any): void;
 }
 
-declare interface BaseApp {
+declare interface Application {
   onLaunch(): void
+  getUserInfo(): Promise<Object>
 }
 
 declare interface BasePage {
   setData(data: Object): void
 }
 
-declare function App(app: BaseApp): void;
+declare function App(app: Application): void;
 declare function Page(page: BasePage): void;
+
+declare function getApp(): Application;

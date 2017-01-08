@@ -1,6 +1,6 @@
-declare function getApp(): SimpleApp;
+import * as Promise from 'bluebird';
 
-class SimpleApp {
+class Application {
   globalData = {
     userInfo: null,
   }
@@ -11,23 +11,24 @@ class SimpleApp {
     wx.setStorageSync('logs', logs)
   }
 
-  getUserInfo(cb: (userInfo: Object) => void) {
-    if (this.globalData.userInfo) {
-      typeof cb == "function" && cb(this.globalData.userInfo);
-    } else {
-      //调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: (res) => {
-              this.globalData.userInfo = res.userInfo
-              typeof cb == "function" && cb(this.globalData.userInfo)
-            },
-          });
-        },
-      });
-    }
+  getUserInfo(): Promise<Object> {
+    return new Promise((resolve) => {
+      if (this.globalData.userInfo) {
+        resolve(this.globalData.userInfo);
+      } else {
+        wx.login({
+          success: () => {
+            wx.getUserInfo({
+              success: ({ userInfo }) => {
+                this.globalData.userInfo = userInfo
+                resolve(userInfo);
+              },
+            });
+          },
+        });
+      }
+    });
   }
 }
 
-App(new SimpleApp());
+App(new Application());

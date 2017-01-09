@@ -44,7 +44,41 @@ const packages = {
   'rxjs': {
     notBundle: true,
   },
+  'wechat-weapp-redux': {
+    notBundle: true,
+    addIndex: true,
+  },
 };
+
+// 依赖拷贝js
+const copyJs = (file, base, dest) => {
+  gulp.src(file, { base })
+    .pipe(gulp.dest(dest))
+    .on('end', () => {
+      fs.readFile(file, 'utf8', (err, contents) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        const matchs = contents.match(/(require\('.*'\))/g);
+        if (!matchs) {
+          return
+        }
+        matchs.forEach((fileName) => {
+          let filePath = fileName.substring(9, fileName.length - 2);
+          if (!filePath.match(/\.js/g)) {
+            filePath = `${filePath}.js`;
+          }
+          const subfile = path.join(path.dirname(file), filePath);
+          fs.exists(path.join(dest, filePath), (exists) => {
+            if (!exists) {
+              copyJs(subfile, base, dest);
+            }
+          });
+        });
+      });
+    });
+}
 
 gulp.task('compile', () => {
   gulp.src(paths.scripts)
@@ -52,7 +86,8 @@ gulp.task('compile', () => {
     .js.pipe(modify({
       // 文件修改，替换`require('bluebird')`为`require("../libs/bluebird")`
       fileModifier: (file, contents) => {
-        if (!contents.match(/(require\("([^.].*)"\))/g)) {
+        const matchs = contents.match(/(require\("([^.].*)"\))/g);
+        if (!matchs) {
           return contents;
         }
         let rPath = path.relative(file.path, './src');
@@ -60,6 +95,13 @@ gulp.task('compile', () => {
         if (rPath.length === 0) {
           rPath = './';
         }
+        matchs.forEach((packageName) => {
+          packageName = packageName.substring(9, packageName.length - 2)
+          const package = packages[packageName];
+          if (package && package.addIndex) {
+            contents = contents.replace(new RegExp(`(require\\("(${packageName})"\\))`, 'g'), 'require("$2/index")');
+          }
+        });
         return contents.replace(/(require\("([^.].*)"\))/g, `require("${rPath}libs/$2")`);
       },
     }))
@@ -95,21 +137,10 @@ gulp.task('copyLibs', () => {
             .pipe(gulp.dest('dist/libs'));
         } else {
           // 拷贝所有js文件，主要是为了redux-observable需要rxjs
-          gulp.src([
-            path.join('node_modules', name, '**', '*.js'),
-            `!${path.join('node_modules', name, 'bundles', '*.js')}`,
-            `!${path.join('node_modules', name, 'src', '*.js')}`,
-          ], { base: path.join('node_modules') }).pipe(gulp.dest('dist/libs'));
-          // fs.readFile(file, 'utf8', (err, contents) => {
-          //   const matchs = contents.match(/(require\('.*'\))/g);
-          //   matchs.forEach((fileName) => {
-          //     const filePath = fileName.substring(11, fileName.length - 2);
-          //     const file = path.join('node_modules', name, `${filePath}.js`);
-          //     gulp.src(file, { base: path.dirname(file) })
-          //       .pipe(rename(`${filePath}.js`))
-          //       .pipe(gulp.dest(path.join('dist/libs', name)));
-          //     });
-          // });
+          readJson(path.join('node_modules', name, 'package.json'), (err, data) => {
+            const file = path.join('node_modules', name, data.main);
+            copyJs(file, path.dirname(file), path.join('dist', 'libs', name));
+          });
         }
       }
     });

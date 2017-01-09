@@ -6,7 +6,14 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var base_1 = require("../base");
 var user_1 = require("../../redux/modules/user");
+var wechat_weapp_redux_1 = require("../../libs/wechat-weapp-redux/index");
 var app = getApp();
+var mapStateToData = function (state) { return ({
+    user: state.user,
+}); };
+var mapDispatchToPage = function (dispatch) { return ({
+    login: function () { return dispatch(user_1.Actions.login()); },
+}); };
 var IndexPage = (function (_super) {
     __extends(IndexPage, _super);
     function IndexPage() {
@@ -24,7 +31,7 @@ var IndexPage = (function (_super) {
     };
     IndexPage.prototype.onLoad = function () {
         var _this = this;
-        this.props.dispatch(user_1.Actions.login());
+        this.login();
         app.getUserInfo().then(function (userInfo) {
             _this.setData({
                 userInfo: userInfo,
@@ -33,4 +40,4 @@ var IndexPage = (function (_super) {
     };
     return IndexPage;
 }(base_1.default));
-Page(new IndexPage());
+Page(wechat_weapp_redux_1.connect(mapStateToData, mapDispatchToPage)(new IndexPage()));

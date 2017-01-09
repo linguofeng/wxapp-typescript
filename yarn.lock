@@ -1390,6 +1390,10 @@ vinyl@^1.0.0:
     clone-stats "^0.0.1"
     replace-ext "0.0.1"
 
+wechat-weapp-redux@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/wechat-weapp-redux/-/wechat-weapp-redux-0.1.2.tgz#63854de2a31665b15d68eaa12f75bd78c652473a"
+
 which@^1.2.12:
   version "1.2.12"
   resolved "https://registry.yarnpkg.com/which/-/which-1.2.12.tgz#de67b5e450269f194909ef23ece4ebe416fa1192"

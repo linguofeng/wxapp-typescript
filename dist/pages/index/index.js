@@ -4,9 +4,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var wechat_weapp_redux_1 = require("../../libs/wechat-weapp-redux/index");
 var base_1 = require("../base");
 var user_1 = require("../../redux/modules/user");
-var wechat_weapp_redux_1 = require("../../libs/wechat-weapp-redux/index");
 var app = getApp();
 var mapStateToData = function (state) { return ({
     user: state.user,
@@ -20,7 +20,7 @@ var IndexPage = (function (_super) {
         var _this = _super.apply(this, arguments) || this;
         _this.data = {
             motto: 'Hello World',
-            userInfo: {},
+            user: null,
         };
         return _this;
     }
@@ -30,13 +30,7 @@ var IndexPage = (function (_super) {
         });
     };
     IndexPage.prototype.onLoad = function () {
-        var _this = this;
         this.login();
-        app.getUserInfo().then(function (userInfo) {
-            _this.setData({
-                userInfo: userInfo,
-            });
-        });
     };
     return IndexPage;
 }(base_1.default));

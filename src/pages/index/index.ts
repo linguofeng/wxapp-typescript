@@ -1,7 +1,7 @@
+import { connect } from 'wechat-weapp-redux';
+
 import BasePage from '../base';
 import { Actions } from '../../redux/modules/user';
-
-import { connect } from 'wechat-weapp-redux';
 
 const app = getApp();
 
@@ -18,7 +18,7 @@ class IndexPage extends BasePage {
   
   data = {
     motto: 'Hello World',
-    userInfo: {},
+    user: null,
   }
 
   bindViewTap() {
@@ -29,11 +29,6 @@ class IndexPage extends BasePage {
 
   onLoad() {
     this.login();
-    app.getUserInfo().then((userInfo) => {
-      this.setData({
-        userInfo,
-      });
-    });
   }
 }
 

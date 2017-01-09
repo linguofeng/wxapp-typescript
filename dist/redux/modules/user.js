@@ -12,14 +12,20 @@ exports.Actions = createActions_1.createActions({
     login: null,
     loginSuccess: ['data'],
     loginFailure: ['error'],
+    userInfo: ['info'],
 });
 var INITIAL_STATE = {
     data: null,
     error: null,
+    info: null,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createActions_1.createReducer(INITIAL_STATE, (_a = {},
     _a[exports.Actions.login] = function (state) { return state; },
+    _a[exports.Actions.userInfo] = function (state, _a) {
+        var info = _a.info;
+        return (__assign({}, state, { info: info }));
+    },
     _a[exports.Actions.loginSuccess] = function (state, _a) {
         var data = _a.data;
         return (__assign({}, state, { data: data }));

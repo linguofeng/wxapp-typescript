@@ -17,8 +17,15 @@ $ gulp watch
 
 ### 主要原理
 
-配合VSCode与Gulp工具实时调用`tsc`编译ts源文件，其它文件通过gulp的watch进行拷贝。
+通过Gulp工具调用`tsc`编译ts源文件，其它文件通过gulp的watch进行拷贝。
+
+第三库是通过package.json文件描述，拷贝相关文件到dist/libs，并修改require引用的路径实现。
 
 ### TODOS:
 
- [ ] 加入第三方库支持
+[x] 加入第三方库支持
+[x] 支持Redux
+[x] 支持rxjs
+[x] 支持moment
+[x] 支持bluebird
+[x] 支持redux-observable

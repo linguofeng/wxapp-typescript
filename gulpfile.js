@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const gulp = require('gulp');
 const ts = require('gulp-typescript');
@@ -37,14 +38,13 @@ const packages = {
   'ramda': {
     main: 'dist/ramda.js',
   },
+  'redux-observable': {
+    main: 'dist/redux-observable.js',
+  },
+  'rxjs': {
+    notBundle: true,
+  },
 };
-
-const getEntryFilePath = (package) => {
-  if (packages[package]) {
-    return packages[package].main;
-  }
-  return null;
-}
 
 gulp.task('compile', () => {
   gulp.src(paths.scripts)
@@ -80,19 +80,37 @@ gulp.task('copyLibs', () => {
         readJson(path.join('node_modules', name, 'package.json'), (err, data) => {
           const file = path.join('node_modules', name, data.browser || data.main);
           gulp.src(file, { base: path.dirname(file) })
-            .pipe(rename(`${name}.js`))
             .pipe(gulp.dest('dist/libs'));
         });
       } else {
-        const file = path.join('node_modules', name, package.main);
-        gulp.src(file, { base: path.dirname(file) })
-          .pipe(gulpif(package.fix, modify({
-            fileModifier: (file, contents) => {
-              return contents.replace(package.fix.search, package.fix.replace);
-            },
-          })))
-          .pipe(rename(`${name}.js`))
-          .pipe(gulp.dest('dist/libs'));
+        if (!package.notBundle) {
+          const file = path.join('node_modules', name, package.main);
+          gulp.src(file, { base: path.dirname(file) })
+            .pipe(gulpif(package.fix, modify({
+              fileModifier: (file, contents) => {
+                return contents.replace(package.fix.search, package.fix.replace);
+              },
+            })))
+            .pipe(rename(`${name}.js`))
+            .pipe(gulp.dest('dist/libs'));
+        } else {
+          // 拷贝所有js文件，主要是为了redux-observable需要rxjs
+          gulp.src([
+            path.join('node_modules', name, '**', '*.js'),
+            `!${path.join('node_modules', name, 'bundles', '*.js')}`,
+            `!${path.join('node_modules', name, 'src', '*.js')}`,
+          ], { base: path.join('node_modules') }).pipe(gulp.dest('dist/libs'));
+          // fs.readFile(file, 'utf8', (err, contents) => {
+          //   const matchs = contents.match(/(require\('.*'\))/g);
+          //   matchs.forEach((fileName) => {
+          //     const filePath = fileName.substring(11, fileName.length - 2);
+          //     const file = path.join('node_modules', name, `${filePath}.js`);
+          //     gulp.src(file, { base: path.dirname(file) })
+          //       .pipe(rename(`${filePath}.js`))
+          //       .pipe(gulp.dest(path.join('dist/libs', name)));
+          //     });
+          // });
+        }
       }
     });
     // TODO 删除不存在的库

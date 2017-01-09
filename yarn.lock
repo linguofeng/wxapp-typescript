@@ -2,12 +2,6 @@
 # yarn lockfile v1
 
 
-"@reactivex/rxjs@^5.0.3":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@reactivex/rxjs/-/rxjs-5.0.3.tgz#f1013ba2bab784b88047942383eaa51fa5779cb1"
-  dependencies:
-    symbol-observable "^1.0.1"
-
 "@types/es6-shim@^0.31.32":
   version "0.31.32"
   resolved "https://registry.yarnpkg.com/@types/es6-shim/-/es6-shim-0.31.32.tgz#8196c09e1e40ac977c713bf258090989f501d8ff"
@@ -1111,6 +1105,10 @@ redux-logger@^2.7.4:
   dependencies:
     deep-diff "0.3.4"
 
+redux-observable@^0.12.2:
+  version "0.12.2"
+  resolved "https://registry.yarnpkg.com/redux-observable/-/redux-observable-0.12.2.tgz#4bc1657c7eedace577e114b74ffe6f6fb2b36ccf"
+
 redux@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.6.0.tgz#887c2b3d0b9bd86eca2be70571c27654c19e188d"
@@ -1157,6 +1155,12 @@ resolve-dir@^0.1.0:
 resolve@^1.1.6, resolve@^1.1.7:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.2.0.tgz#9589c3f2f6149d1417a40becc1663db6ec6bc26c"
+
+rxjs@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.0.3.tgz#fc8bdf464ebf938812748e4196788f392fef9754"
+  dependencies:
+    symbol-observable "^1.0.1"
 
 "semver@2 || 3 || 4 || 5", semver@^4.1.0:
   version "4.3.6"

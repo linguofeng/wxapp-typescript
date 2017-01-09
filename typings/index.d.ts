@@ -4,6 +4,7 @@ declare namespace wx {
   export function login(args: any): void;
   export function getUserInfo(args: any): void;
   export function navigateTo(args: any): void;
+  export function request(args: Object): void;
 }
 
 declare interface Application {

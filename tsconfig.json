@@ -6,6 +6,7 @@
   },
   "files": [
     "./typings/index.d.ts",
+    "./src/net/api.ts",
     "./src/app.ts",
     "./src/pages/base.ts",
     "./src/pages/index/index.ts",

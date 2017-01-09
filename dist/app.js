@@ -4,11 +4,8 @@ global.global = global;
 global.Object = Object;
 global.clearTimeout = clearTimeout;
 var Promise = require("./libs/bluebird");
-var Rx = require("./libs/rxjs/Rx");
+require("./libs/rxjs/Rx");
 var configureStore_1 = require("./redux/configureStore");
-Rx.Observable
-    .of('hello world')
-    .subscribe(function (x) { return console.log(x); });
 var store = configureStore_1.default();
 var Application = (function () {
     function Application() {

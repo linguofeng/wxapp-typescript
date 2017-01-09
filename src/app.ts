@@ -4,12 +4,8 @@ global.Object = Object;
 global.clearTimeout = clearTimeout;
 
 import * as Promise from 'bluebird';
-import * as Rx from 'rxjs/Rx';
+import 'rxjs/Rx';
 import configureStore from './redux/configureStore';
-
-Rx.Observable
-  .of('hello world')
-  .subscribe((x) => console.log(x));
 
 const store = configureStore();
 

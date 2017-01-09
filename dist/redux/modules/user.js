@@ -11,9 +11,11 @@ var createActions_1 = require("../createActions");
 exports.Actions = createActions_1.createActions({
     login: null,
     loginSuccess: ['data'],
+    loginFailure: ['error'],
 });
 var INITIAL_STATE = {
     data: null,
+    error: null,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createActions_1.createReducer(INITIAL_STATE, (_a = {},
@@ -21,6 +23,10 @@ exports.default = createActions_1.createReducer(INITIAL_STATE, (_a = {},
     _a[exports.Actions.loginSuccess] = function (state, _a) {
         var data = _a.data;
         return (__assign({}, state, { data: data }));
+    },
+    _a[exports.Actions.loginFail] = function (state, _a) {
+        var error = _a.error;
+        return (__assign({}, state, { error: error }));
     },
     _a));
 var _a;

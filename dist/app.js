@@ -4,10 +4,32 @@ global.global = global;
 global.Object = Object;
 global.clearTimeout = clearTimeout;
 var Promise = require("./libs/bluebird");
-var Rx = require("./libs/@reactivex/rxjs");
-Rx.Observable
+var rxjs_1 = require("./libs/@reactivex/rxjs");
+var redux_1 = require("./libs/redux");
+rxjs_1.Observable
     .of('hello world')
     .subscribe(function (x) { return console.log(x); });
+function counter(state, action) {
+    if (state === void 0) { state = 0; }
+    switch (action.type) {
+        case 'INCREMENT':
+            return state + 1;
+        case 'DECREMENT':
+            return state - 1;
+        default:
+            return state;
+    }
+}
+var store = redux_1.createStore(counter);
+store.subscribe(function () {
+    return console.log(store.getState());
+});
+store.dispatch({ type: 'INCREMENT' });
+// 1
+store.dispatch({ type: 'INCREMENT' });
+// 2
+store.dispatch({ type: 'DECREMENT' });
+// 1
 var Application = (function () {
     function Application() {
         this.globalData = {

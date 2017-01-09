@@ -3,6 +3,7 @@ const gulp = require('gulp');
 const ts = require('gulp-typescript');
 const modify = require('gulp-modify');
 const rename = require("gulp-rename");
+const gulpif = require('gulp-if');
 const readJson = require('read-package-json');
 
 const tsProject = ts.createProject('tsconfig.json');
@@ -22,6 +23,13 @@ const paths = {
 const packages = {
   '@reactivex/rxjs': {
     main: 'dist/global/Rx.js',
+  },
+  'redux': {
+    main: 'dist/redux.js',
+    fix: {
+      search: /function\(global\)/g,
+      replace: 'function()',
+    },
   },
 };
 
@@ -61,16 +69,21 @@ gulp.task('copyStatic', () => {
 gulp.task('copyLibs', () => {
   readJson('package.json', (err, { dependencies }) => {
     Object.keys(dependencies).forEach((name) => {
-      let file = getEntryFilePath(name);
-      if (!file) {
+      const package = packages[name];
+      if (!package) {
         readJson(path.join('node_modules', name, 'package.json'), (err, data) => {
-          file = path.join('node_modules', name, data.browser || data.main);
+          const file = path.join('node_modules', name, data.browser || data.main);
           gulp.src(file, { base: path.dirname(file) })
             .pipe(gulp.dest('dist/libs'));
         });
       } else {
-        file = path.join('node_modules', name, file);
+        const file = path.join('node_modules', name, package.main);
         gulp.src(file, { base: path.dirname(file) })
+          .pipe(gulpif(package.fix, modify({
+            fileModifier: (file, contents) => {
+              return contents.replace(package.fix.search, package.fix.replace);
+            },
+          })))
           .pipe(rename(`${name}.js`))
           .pipe(gulp.dest('dist/libs'));
       }

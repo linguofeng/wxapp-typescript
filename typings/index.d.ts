@@ -9,6 +9,9 @@ declare namespace wx {
 declare interface Application {
   onLaunch(): void
   getUserInfo(): Promise<Object>
+  store: {
+    dispatch: (Object) => void,
+  }
 }
 
 declare interface BasePage {

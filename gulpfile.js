@@ -31,6 +31,12 @@ const packages = {
       replace: 'function()',
     },
   },
+  'redux-logger': {
+    main: 'dist/index.js',
+  },
+  'ramda': {
+    main: 'dist/ramda.js',
+  },
 };
 
 const getEntryFilePath = (package) => {
@@ -74,6 +80,7 @@ gulp.task('copyLibs', () => {
         readJson(path.join('node_modules', name, 'package.json'), (err, data) => {
           const file = path.join('node_modules', name, data.browser || data.main);
           gulp.src(file, { base: path.dirname(file) })
+            .pipe(rename(`${name}.js`))
             .pipe(gulp.dest('dist/libs'));
         });
       } else {

@@ -5,40 +5,20 @@ global.clearTimeout = clearTimeout;
 
 import * as Promise from 'bluebird';
 import { Observable } from '@reactivex/rxjs';
-import { createStore } from 'redux';
+import configureStore from './redux/configureStore';
 
 Observable
   .of('hello world')
   .subscribe((x) => console.log(x));
 
-function counter(state = 0, action) {
-  switch (action.type) {
-  case 'INCREMENT':
-    return state + 1
-  case 'DECREMENT':
-    return state - 1
-  default:
-    return state
-  }
-}
-
-let store = createStore(counter);
-
-store.subscribe(() =>
-  console.log(store.getState())
-);
-
-store.dispatch({ type: 'INCREMENT' })
-// 1
-store.dispatch({ type: 'INCREMENT' })
-// 2
-store.dispatch({ type: 'DECREMENT' })
-// 1
+const store = configureStore();
 
 class Application {
   globalData = {
     userInfo: null,
   }
+
+  store = store;
 
   onLaunch() {
     var logs = wx.getStorageSync('logs') || [];

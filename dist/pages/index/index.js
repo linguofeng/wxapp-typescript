@@ -5,6 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var base_1 = require("../base");
+var user_1 = require("../../redux/modules/user");
 var app = getApp();
 var IndexPage = (function (_super) {
     __extends(IndexPage, _super);
@@ -23,6 +24,7 @@ var IndexPage = (function (_super) {
     };
     IndexPage.prototype.onLoad = function () {
         var _this = this;
+        this.props.dispatch(user_1.Actions.login());
         app.getUserInfo().then(function (userInfo) {
             _this.setData({
                 userInfo: userInfo,

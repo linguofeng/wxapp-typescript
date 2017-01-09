@@ -23,9 +23,9 @@ $ gulp watch
 
 ### TODOS:
 
-[x] 加入第三方库支持
-[x] 支持Redux
-[x] 支持rxjs
-[x] 支持moment
-[x] 支持bluebird
-[x] 支持redux-observable
+- [x] 加入第三方库支持
+- [x] 支持Redux
+- [x] 支持rxjs
+- [x] 支持moment
+- [x] 支持bluebird
+- [x] 支持redux-observable

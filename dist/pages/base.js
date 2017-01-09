@@ -1,7 +1,6 @@
 "use strict";
 var Base = (function () {
     function Base() {
-        this.data = {};
     }
     return Base;
 }());

@@ -10,7 +10,7 @@ declare namespace wx {
 declare interface Application {
   onLaunch(): void
   store: {
-    dispatch: (Object) => void,
+    dispatch: (action: Object) => void,
   }
 }
 

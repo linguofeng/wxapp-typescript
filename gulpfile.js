@@ -5,6 +5,7 @@ const ts = require('gulp-typescript');
 const modify = require('gulp-modify');
 const rename = require("gulp-rename");
 const gulpif = require('gulp-if');
+const uglify = require('gulp-uglify');
 const readJson = require('read-package-json');
 
 const tsProject = ts.createProject('tsconfig.json');
@@ -18,13 +19,11 @@ const paths = {
     'src/**/*.json',
     'src/**/*.wxml',
     'src/**/*.wxss',
+    'src/**/*.png',
   ],
 };
 
 const packages = {
-  '@reactivex/rxjs': {
-    main: 'dist/global/Rx.js',
-  },
   'redux': {
     main: 'dist/redux.js',
     fix: {
@@ -44,15 +43,56 @@ const packages = {
   'rxjs': {
     notBundle: true,
   },
+  'moment': {
+    main: 'min/moment.min.js',
+    fix: {
+      search: /d\[e\]instanceof Function/g,
+      replace: 'typeof d\[e\] === \'function\'',
+    },
+  },
   'wechat-weapp-redux': {
     notBundle: true,
     addIndex: true,
+    fix: {
+      'connect.js': [
+        {
+          search: /({}, (pageConfig))/g,
+          replace: '$2',
+        },
+        {
+          search: /(handleChange.apply\(this\))/g,
+          replace: 'handleChange.apply\(this, \[options\]\)',
+        }
+      ],
+      'Provider.js': [{
+        search: /({}, (appConfig))/g,
+        replace: '$2',
+      }],
+    },
   },
 };
 
 // 依赖拷贝js
 const copyJs = (file, base, dest) => {
+  let fix;
+  if (file.indexOf('node_modules') === 0) {
+    let packageName = file.substr(13);
+    packageName = packageName.substring(0, packageName.indexOf('/'));
+    const package = packages[packageName];
+    if (package && package.fix && !package.fix.search) {
+      fix = package.fix[path.basename(file)];
+    }
+  }
   gulp.src(file, { base })
+    .pipe(gulpif(fix !== undefined, modify({
+      fileModifier: (file, contents) => {
+        fix.forEach((it) => {
+          contents = contents.replace(it.search, it.replace)
+        });
+        return contents;
+      },
+    })))
+    .pipe(uglify())
     .pipe(gulp.dest(dest))
     .on('end', () => {
       fs.readFile(file, 'utf8', (err, contents) => {
@@ -122,6 +162,7 @@ gulp.task('copyLibs', () => {
         readJson(path.join('node_modules', name, 'package.json'), (err, data) => {
           const file = path.join('node_modules', name, data.browser || data.main);
           gulp.src(file, { base: path.dirname(file) })
+            .pipe(uglify())
             .pipe(gulp.dest('dist/libs'));
         });
       } else {
@@ -134,6 +175,7 @@ gulp.task('copyLibs', () => {
               },
             })))
             .pipe(rename(`${name}.js`))
+            .pipe(uglify())
             .pipe(gulp.dest('dist/libs'));
         } else {
           // 拷贝所有js文件，主要是为了redux-observable需要rxjs

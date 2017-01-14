@@ -1,6 +1,1 @@
-"use strict";
-var root_1 = require('../util/root');
-var Symbol = root_1.root.Symbol;
-exports.$$rxSubscriber = (typeof Symbol === 'function' && typeof Symbol.for === 'function') ?
-    Symbol.for('rxSubscriber') : '@@rxSubscriber';
-//# sourceMappingURL=rxSubscriber.js.map
+"use strict";var root_1=require("../util/root"),Symbol=root_1.root.Symbol;exports.$$rxSubscriber="function"==typeof Symbol&&"function"==typeof Symbol.for?Symbol.for("rxSubscriber"):"@@rxSubscriber";

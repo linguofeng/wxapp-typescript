@@ -1,6 +1,1 @@
-"use strict";
-function isObject(x) {
-    return x != null && typeof x === 'object';
-}
-exports.isObject = isObject;
-//# sourceMappingURL=isObject.js.map
+"use strict";function isObject(t){return null!=t&&"object"==typeof t}exports.isObject=isObject;

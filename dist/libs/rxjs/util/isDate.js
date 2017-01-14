@@ -1,6 +1,1 @@
-"use strict";
-function isDate(value) {
-    return value instanceof Date && !isNaN(+value);
-}
-exports.isDate = isDate;
-//# sourceMappingURL=isDate.js.map
+"use strict";function isDate(t){return t instanceof Date&&!isNaN(+t)}exports.isDate=isDate;

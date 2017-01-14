@@ -1,11 +1,1 @@
-"use strict";
-function not(pred, thisArg) {
-    function notPred() {
-        return !(notPred.pred.apply(notPred.thisArg, arguments));
-    }
-    notPred.pred = pred;
-    notPred.thisArg = thisArg;
-    return notPred;
-}
-exports.not = not;
-//# sourceMappingURL=not.js.map
+"use strict";function not(t,r){function n(){return!n.pred.apply(n.thisArg,arguments)}return n.pred=t,n.thisArg=r,n}exports.not=not;

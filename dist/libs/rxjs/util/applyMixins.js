@@ -1,13 +1,1 @@
-"use strict";
-function applyMixins(derivedCtor, baseCtors) {
-    for (var i = 0, len = baseCtors.length; i < len; i++) {
-        var baseCtor = baseCtors[i];
-        var propertyKeys = Object.getOwnPropertyNames(baseCtor.prototype);
-        for (var j = 0, len2 = propertyKeys.length; j < len2; j++) {
-            var name_1 = propertyKeys[j];
-            derivedCtor.prototype[name_1] = baseCtor.prototype[name_1];
-        }
-    }
-}
-exports.applyMixins = applyMixins;
-//# sourceMappingURL=applyMixins.js.map
+"use strict";function applyMixins(t,p){for(var r=0,e=p.length;r<e;r++)for(var o=p[r],i=Object.getOwnPropertyNames(o.prototype),n=0,a=i.length;n<a;n++){var s=i[n];t.prototype[s]=o.prototype[s]}}exports.applyMixins=applyMixins;

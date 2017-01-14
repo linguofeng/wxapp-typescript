@@ -1,6 +1,1 @@
-"use strict";
-function isPromise(value) {
-    return value && typeof value.subscribe !== 'function' && typeof value.then === 'function';
-}
-exports.isPromise = isPromise;
-//# sourceMappingURL=isPromise.js.map
+"use strict";function isPromise(i){return i&&"function"!=typeof i.subscribe&&"function"==typeof i.then}exports.isPromise=isPromise;

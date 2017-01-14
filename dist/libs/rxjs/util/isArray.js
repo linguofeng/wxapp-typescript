@@ -1,3 +1,1 @@
-"use strict";
-exports.isArray = Array.isArray || (function (x) { return x && typeof x.length === 'number'; });
-//# sourceMappingURL=isArray.js.map
+"use strict";exports.isArray=Array.isArray||function(r){return r&&"number"==typeof r.length};
